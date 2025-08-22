@@ -22,7 +22,7 @@ export async function DBConnection() {
 
     try {
         await mongoose.connect(process.env.MONGODB_CONNECTION, {
-            dbName: "myDatabase", // apna db name daal sakte ho
+            dbName: "token", // apna db name daal sakte ho
         });
         console.log("✅ MongoDB Connected");
     } catch (error) {
