@@ -1,11 +1,11 @@
-import express from 'express';
 import dotenv from 'dotenv'
+dotenv.config();
+import express from 'express';
 import cors from "cors";
 import { DBConnection } from './config/dbConnection';
 import authRoutes from "./routes/authRoutes";
 import session from 'express-session';
 
-dotenv.config();
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
@@ -27,12 +27,13 @@ app.use(
 );
 
 // Database Connection
-if (process.env.MONGODB_CONNECTION) {
+if (process.env.MONGO_URI) {
     DBConnection();
 } else {
     console.error("MongoDB connection string is missing in .env");
     process.exit(1);
 }
+console.log("Loaded MONGO_URI:", process.env.MONGO_URI);
 
 app.use("/api/auth", authRoutes);
 
