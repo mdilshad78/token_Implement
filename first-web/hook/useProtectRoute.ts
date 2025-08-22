@@ -38,7 +38,7 @@ export function useProtectRoute() {
         //         .finally(() => setIsChecking(false));
         // }, [router]);
 
-        axios.post("http://localhost:5000/api/auth/verify",
+        axios.post("http://token-implement-backend.vercel.app/api/auth/verify",
             { token }, // ✅ send token in body
             { headers: { "Content-Type": "application/json" } } // ✅ headers
         )
