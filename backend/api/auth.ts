@@ -7,8 +7,11 @@ import User from "../src/models/User"; // adjust path as per your folder
 
 // DB connection helper
 async function DBConnection() {
+    console.log("DEBUG MONGO_URI =", process.env.MONGODB_CONNECTION); // 👈 Vercel logs me check karo
     if (mongoose.connection.readyState >= 1) return;
-    await mongoose.connect(process.env.MONGO_URI as string);
+    await mongoose.connect(process.env.MONGODB_CONNECTION as string, {
+        dbName: "token",
+    });
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
