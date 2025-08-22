@@ -28,7 +28,7 @@ app.use(
 
 // Database Connection
 if (process.env.MONGODB_CONNECTION) {
-    DBConnection(process.env.MONGODB_CONNECTION);
+    DBConnection();
 } else {
     console.error("MongoDB connection string is missing in .env");
     process.exit(1);
