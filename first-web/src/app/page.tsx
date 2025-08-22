@@ -13,30 +13,53 @@ export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-    const router=useRouter()
+    const router = useRouter()
 
     const submit = async (e: React.FormEvent) => {
-        e.preventDefault(); // ✅ prevent page reload
+        e.preventDefault();
 
         try {
-            const response = await axios.post("http://token-implement-backend.vercel.app/api/auth/login", {
-                email,
-                password,
-            });
+            const response = await axios.post(
+                "https://token-implement.vercel.app/api/auth?action=login",
+                { email, password },
+                { withCredentials: true }
+            );
 
             if (response.data.token) {
-                // ✅ Store token in sessionStorage
                 sessionStorage.setItem("token", response.data.token);
-
                 alert("Login successful 🎉");
-                console.log("User data:", response.data);
-                router.push("/dashboard")
+                router.push("/dashboard");
             }
         } catch (error: any) {
             console.error("Login error:", error.response?.data || error.message);
             alert(error.response?.data?.message || "Login failed");
         }
     };
+
+    // const submit = async (e: React.FormEvent) => {
+    //     e.preventDefault(); // ✅ prevent page reload
+
+    //     try {
+    //         const response = await axios.post("https://token-implement.vercel.app/api/auth?action=login", {
+    //             email,
+    //             password,
+    //         }, {
+    //             withCredentials: true
+    //         });
+
+    //         if (response.data.token) {
+    //             // ✅ Store token in sessionStorage
+    //             sessionStorage.setItem("token", response.data.token);
+
+    //             alert("Login successful 🎉");
+    //             console.log("User data:", response.data);
+    //             router.push("/dashboard")
+    //         }
+    //     } catch (error: any) {
+    //         console.error("Login error:", error.response?.data || error.message);
+    //         alert(error.response?.data?.message || "Login failed");
+    //     }
+    // };
 
 
     return (

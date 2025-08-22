@@ -11,10 +11,33 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
 
-app.use(cors({
-    origin: process.env.CORS_ORIGIN,
-    credentials: true
-}));
+// app.use(
+//     cors({
+//         origin: [
+//             process.env.CORS_ORIGIN || "http://localhost:3000",
+//             "https://token-implement-frontend.vercel.app/"
+//         ],
+//         credentials: true,
+//     })
+// );
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      const allowedOrigins = [
+        "http://localhost:3000",
+        "https://token-implement-frontend.vercel.app"
+      ];
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
+
 
 // ✅ Session middleware
 app.use(
@@ -33,7 +56,6 @@ if (process.env.MONGO_URI) {
     console.error("MongoDB connection string is missing in .env");
     process.exit(1);
 }
-console.log("Loaded MONGO_URI:", process.env.MONGO_URI);
 
 app.use("/api/auth", authRoutes);
 

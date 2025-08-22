@@ -8,6 +8,9 @@ import jwt from 'jsonwebtoken';
 export const registerUser = async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
+    if (!email || !password)
+        return res.status(400).json({ message: "Email and password required" });
+
     const userExists = await User.findOne({ email });
     if (userExists) return res.status(400).json({ message: "User already exists" });
 
@@ -23,20 +26,35 @@ export const registerUser = async (req: Request, res: Response) => {
 
 };
 
+
+
 export const loginUser = async (req: Request, res: Response) => {
     const { email, password } = req.body;
+    console.log("Login request received:", email, password);
 
-    const user = await User.findOne({ email });
-    if (!user) return res.status(401).json({ message: "Invalid email or password" });
+    try {
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(401).json({ message: "wrong" });
+        if (!email || !password) {
+            return res.status(400).json({ message: "Email and password required" });
+        }
 
-    res.json({
-        _id: user.id,
-        email: user.email,
-        token: generateToken(user.id),
-    });
+        const user = await User.findOne({ email });
+        if (!user) return res.status(401).json({ message: "Invalid email or password" });
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) return res.status(401).json({ message: "Wrong password" });
+
+        const token = generateToken(user._id.toString());
+        console.log("Generated token:", token);
+
+        res.json({
+            _id: user.id,
+            email: user.email,
+            token,
+        });
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error });
+    }
 };
 
 export const verifyToken = async (req: Request, res: Response) => {
