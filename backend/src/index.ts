@@ -40,24 +40,3 @@ app.use("/api/auth", authRoutes);
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`✅ Server running on http://localhost:${PORT}`));
 
-// import express from "express";
-// import dotenv from "dotenv";
-// import { DBConnection } from "./config/dbConnection";
-
-// dotenv.config(); // <-- load .env
-
-// const app = express();
-// app.use(express.json());
-
-// const PORT = process.env.PORT || 5000;
-// const MONGO_URI = process.env.MONGODB_CONNECTION;
-
-// if (!MONGO_URI) {
-//     throw new Error("MongoDB connection string is missing in .env");
-// }
-
-// DBConnection();
-
-// app.listen(PORT, () => {
-//     console.log(`🚀 Server running on port ${PORT}`);
-// });
