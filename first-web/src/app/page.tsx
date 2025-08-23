@@ -27,8 +27,8 @@ export default function Login() {
             console.log("Full response:", response.data);
 
             const token = response.data.token;
-            localStorage.setItem("token", token);
-            console.log("Saved token:", localStorage.getItem("token"));
+            sessionStorage.setItem("token", token);
+            console.log("Saved token:", sessionStorage.getItem("token"));
 
             // ❌ alert hatao
             // alert("Login successful 🎉");

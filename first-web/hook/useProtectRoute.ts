@@ -10,7 +10,7 @@ export function useProtectRoute() {
     const [user, setUser] = useState<any>(null);
 
     useEffect(() => {
-        const token = localStorage.getItem("token"); // 👈 ya cookie use karo
+        const token = sessionStorage.getItem("token"); // 👈 ya cookie use karo
 
         if (!token) {
             router.replace("/");
@@ -30,12 +30,12 @@ export function useProtectRoute() {
                 if (res.data.valid) {
                     setUser(res.data.user); // ✅ backend decoded user
                 } else {
-                    localStorage.removeItem("token");
+                    sessionStorage.removeItem("token");
                     router.replace("/");
                 }
             })
             .catch(() => {
-                localStorage.removeItem("token");
+                sessionStorage.removeItem("token");
                 router.replace("/");
             })
             .finally(() => setIsChecking(false));
