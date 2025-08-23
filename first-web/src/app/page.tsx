@@ -14,56 +14,43 @@ export default function Login() {
     const [password, setPassword] = useState<string>("");
     const router = useRouter()
 
+
+
     const submit = async (e: React.FormEvent) => {
-        e.preventDefault();
+        e.preventDefault(); // ✅ prevent page reload
 
         try {
-            const response = await axios.post(
-                "https://token-implement.vercel.app/api/auth",
-                { action: "login", email, password },
+            const response = await axios.post("https://token-implement.vercel.app/api/auth/login",
+                { email, password, },
                 {
-                    headers: { "Content-Type": "application/json" },
-                    withCredentials: true,
-                }
-            );
+                    headers: { "Content-Type": "application/json" }
+                });
 
-            if (response.data.token) {
-                sessionStorage.setItem("token", response.data.token);
-                alert("Login successful 🎉");
-                router.push("/dashboard");
-            }
+            // ✅ adjust according to backend
+            console.log("Full response:", response.data);
+
+
+            // ✅ directly set token
+            const token = response.data.token;
+            sessionStorage.setItem("token", token);
+            console.log("Saved token:", sessionStorage.getItem("token"));
+
+            alert("Login successful 🎉");
+            router.push("/dashboard");
+
+            // if (response.data.token) {
+            //     // ✅ Store token in sessionStorage
+            //     sessionStorage.setItem("token", token);
+
+            //     alert("Login successful 🎉");
+            //     console.log("User data:", response.data);
+            //     router.push("/dashboard")
+            // }
         } catch (error: any) {
             console.error("Login error:", error.response?.data || error.message);
             alert(error.response?.data?.message || "Login failed");
         }
     };
-
-
-
-    // const submit = async (e: React.FormEvent) => {
-    //     e.preventDefault(); // ✅ prevent page reload
-
-    //     try {
-    //         const response = await axios.post("https://token-implement.vercel.app/api/auth?action=login", {
-    //             email,
-    //             password,
-    //         }, {
-    //             withCredentials: true
-    //         });
-
-    //         if (response.data.token) {
-    //             // ✅ Store token in sessionStorage
-    //             sessionStorage.setItem("token", response.data.token);
-
-    //             alert("Login successful 🎉");
-    //             console.log("User data:", response.data);
-    //             router.push("/dashboard")
-    //         }
-    //     } catch (error: any) {
-    //         console.error("Login error:", error.response?.data || error.message);
-    //         alert(error.response?.data?.message || "Login failed");
-    //     }
-    // };
 
 
     return (
