@@ -7,7 +7,6 @@ import { FaFacebookF } from "react-icons/fa6";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import router from '../../../backend/src/routes/authRoutes';
 
 export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
@@ -20,8 +19,8 @@ export default function Login() {
 
         try {
             const response = await axios.post(
-                "https://token-implement.vercel.app/api/auth?action=login",
-                { email, password },
+                "https://token-implement.vercel.app/api/auth",   // ✅ removed ?action=login
+                { action: "login", email, password },           // ✅ pass action in body
                 { withCredentials: true }
             );
 
@@ -35,6 +34,7 @@ export default function Login() {
             alert(error.response?.data?.message || "Login failed");
         }
     };
+
 
     // const submit = async (e: React.FormEvent) => {
     //     e.preventDefault(); // ✅ prevent page reload
