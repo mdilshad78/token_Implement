@@ -19,9 +19,12 @@ export default function Login() {
 
         try {
             const response = await axios.post(
-                "https://token-implement.vercel.app/api/auth",   // ✅ removed ?action=login
-                { action: "login", email, password },           // ✅ pass action in body
-                { withCredentials: true }
+                "https://token-implement.vercel.app/api/auth",
+                { action: "login", email, password },
+                {
+                    headers: { "Content-Type": "application/json" },
+                    withCredentials: true,
+                }
             );
 
             if (response.data.token) {
@@ -34,6 +37,7 @@ export default function Login() {
             alert(error.response?.data?.message || "Login failed");
         }
     };
+
 
 
     // const submit = async (e: React.FormEvent) => {
