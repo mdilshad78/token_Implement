@@ -32,8 +32,8 @@ export default function Login() {
 
             // ✅ directly set token
             const token = response.data.token;
-            sessionStorage.setItem("token", token);
-            console.log("Saved token:", sessionStorage.getItem("token"));
+            localStorage.setItem("token", token);
+            console.log("Saved token:", localStorage.getItem("token"));
 
             alert("Login successful 🎉");
             router.push("/dashboard");

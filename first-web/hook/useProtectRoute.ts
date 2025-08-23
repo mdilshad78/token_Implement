@@ -25,7 +25,7 @@ export function useProtectRoute() {
                 if (res.data.valid) {
                     setUser(res.data.user); // ✅ backend decoded user
                 } else {
-                    sessionStorage.removeItem("token");
+                    localStorage.removeItem("token");
                     router.replace("/");
                 }
             })
