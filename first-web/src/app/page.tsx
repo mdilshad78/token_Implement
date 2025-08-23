@@ -14,43 +14,72 @@ export default function Login() {
     const [password, setPassword] = useState<string>("");
     const router = useRouter()
 
-
-
     const submit = async (e: React.FormEvent) => {
-        e.preventDefault(); // ✅ prevent page reload
+        e.preventDefault();
 
         try {
             const response = await axios.post("https://token-implement.vercel.app/api/auth/login",
-                { email, password, },
+                { email, password },
                 {
                     headers: { "Content-Type": "application/json" }
                 });
 
-            // ✅ adjust according to backend
             console.log("Full response:", response.data);
 
-
-            // ✅ directly set token
             const token = response.data.token;
             localStorage.setItem("token", token);
             console.log("Saved token:", localStorage.getItem("token"));
 
-            alert("Login successful 🎉");
-            router.push("/dashboard");
+            // ❌ alert hatao
+            // alert("Login successful 🎉");
 
-            // if (response.data.token) {
-            //     // ✅ Store token in sessionStorage
-            //     sessionStorage.setItem("token", token);
+            // ✅ chhoti delay ke sath redirect
+            setTimeout(() => {
+                router.push("/dashboard");
+            }, 100);
 
-            //     alert("Login successful 🎉");
-            //     console.log("User data:", response.data);
-            //     router.push("/dashboard")
-            // }
         } catch (error: any) {
             console.error("Login error:", error.response?.data || error.message);
             alert(error.response?.data?.message || "Login failed");
         }
     };
+
+
+    // const submit = async (e: React.FormEvent) => {
+    //     e.preventDefault(); // ✅ prevent page reload
+
+    //     try {
+    //         const response = await axios.post("https://token-implement.vercel.app/api/auth/login",
+    //             { email, password, },
+    //             {
+    //                 headers: { "Content-Type": "application/json" }
+    //             });
+
+    //         // ✅ adjust according to backend
+    //         console.log("Full response:", response.data);
+
+
+    //         // ✅ directly set token
+    //         const token = response.data.token;
+    //         localStorage.setItem("token", token);
+    //         console.log("Saved token:", localStorage.getItem("token"));
+
+    //         alert("Login successful 🎉");
+    //         router.push("/dashboard");
+
+    //         // if (response.data.token) {
+    //         //     // ✅ Store token in sessionStorage
+    //         //     sessionStorage.setItem("token", token);
+
+    //         //     alert("Login successful 🎉");
+    //         //     console.log("User data:", response.data);
+    //         //     router.push("/dashboard")
+    //         // }
+    //     } catch (error: any) {
+    //         console.error("Login error:", error.response?.data || error.message);
+    //         alert(error.response?.data?.message || "Login failed");
+    //     }
+    // };
 
 
     return (

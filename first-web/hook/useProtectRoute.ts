@@ -10,16 +10,21 @@ export function useProtectRoute() {
     const [user, setUser] = useState<any>(null);
 
     useEffect(() => {
-        const token = sessionStorage.getItem("token");
+        const token = localStorage.getItem("token"); // 👈 ya cookie use karo
 
         if (!token) {
             router.replace("/");
             return;
         }
 
-        axios.post("http://token-implement.vercel.app/api/auth/verify",
-            { token }, // ✅ send token in body
-            { headers: { "Content-Type": "application/json" } } // ✅ headers
+        axios.post(
+            "https://token-implement.vercel.app/api/auth/verify",
+            {},
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`, // ✅ send token in header
+                },
+            }
         )
             .then((res) => {
                 if (res.data.valid) {
@@ -30,7 +35,7 @@ export function useProtectRoute() {
                 }
             })
             .catch(() => {
-                sessionStorage.removeItem("token");
+                localStorage.removeItem("token");
                 router.replace("/");
             })
             .finally(() => setIsChecking(false));

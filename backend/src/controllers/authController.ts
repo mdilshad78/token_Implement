@@ -57,21 +57,50 @@ export const loginUser = async (req: Request, res: Response) => {
     }
 };
 
+// export const verifyToken = async (req: Request, res: Response) => {
+//     try {
+//         const { token } = req.body;
+//         if (!token) return res.status(401).json({ valid: false, message: "No token provided" });
+
+//         const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { id: string };
+//         const user = await User.findById(decoded.id).select("-password"); // password ko mat bhejna
+
+//         if (!user) return res.status(401).json({ valid: false, message: "User not found" });
+
+//         res.json({ valid: true, user });
+//     } catch (err) {
+//         res.status(401).json({ valid: false, message: "Invalid token" });
+//     }
+// }
+
 export const verifyToken = async (req: Request, res: Response) => {
     try {
-        const { token } = req.body;
-        if (!token) return res.status(401).json({ valid: false, message: "No token provided" });
+        const authHeader = req.headers.authorization;
+        if (!authHeader) {
+            return res.status(401).json({ valid: false, message: "No token provided" });
+        }
 
+        // Bearer <token>
+        const token = authHeader.split(" ")[1];
+        if (!token) {
+            return res.status(401).json({ valid: false, message: "Token missing" });
+        }
+
+        // ✅ Verify token
         const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { id: string };
-        const user = await User.findById(decoded.id).select("-password"); // password ko mat bhejna
 
-        if (!user) return res.status(401).json({ valid: false, message: "User not found" });
+        // ✅ Find user (exclude password)
+        const user = await User.findById(decoded.id).select("-password");
+        if (!user) {
+            return res.status(401).json({ valid: false, message: "User not found" });
+        }
 
+        // ✅ Success
         res.json({ valid: true, user });
     } catch (err) {
         res.status(401).json({ valid: false, message: "Invalid token" });
     }
-}
+};
 
 export const getProfile = async (req: any, res: Response) => {
     res.json(req.user);
